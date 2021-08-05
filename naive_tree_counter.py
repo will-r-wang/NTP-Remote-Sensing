@@ -4,12 +4,12 @@ import numpy as np
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='naive tree count for an input image file')
-    parser.add_argument('-o', '--output', help='Output annotated image file name')
+    parser.add_argument('-o', '--output-image-path', help='Output annotated image file name', default="images/sample_trees_annotated.tif")
     requiredNamed = parser.add_argument_group('required named arguments')
-    requiredNamed.add_argument('-i', '--input-image', help='Input image file name', required=True)
+    requiredNamed.add_argument('-i', '--input-image-path', help='Input image file name', required=True)
     args = parser.parse_args()
 
-    image = cv2.imread(args.input_image)
+    image = cv2.imread(args.input_image_path)
     height, width, _ = image.shape
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
@@ -27,13 +27,12 @@ if __name__ == '__main__':
     mask = dst == 0
     green = np.zeros_like(image, np.uint8)
     green[mask] = image[mask]
-    cv2.imwrite("images/sample_trees_mask.tif", green)
 
     # Image grid-line annotation
     for i in range(1, height//400 + 1):
-        cv2.line(image, (0, i * 400), (width, i * 400), (0, 0, 255), 1)
+        cv2.line(green, (0, i * 400), (width, i * 400), (0, 0, 255), 1)
 
     for j in range(1, width//400 + 1):
-        cv2.line(image, (j * 400, 0), (j * 400, height), (0, 0, 255), 1)
+        cv2.line(green, (j * 400, 0), (j * 400, height), (0, 0, 255), 1)
 
-    cv2.imwrite("images/sample_trees_annotated.tif", image)
+    cv2.imwrite(args.output_image_path, green)
