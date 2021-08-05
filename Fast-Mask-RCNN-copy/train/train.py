@@ -8,7 +8,8 @@ import functools
 import os, sys
 import time
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
 import tf_slim as slim
 from time import gmtime, strftime
 
@@ -242,7 +243,7 @@ def train():
     summary_writer = tf.summary.FileWriter(logdir, graph=sess.graph)
 
     ## restore
-    restore(sess)
+    # restore(sess)
 
     ## main loop
     coord = tf.train.Coordinator()

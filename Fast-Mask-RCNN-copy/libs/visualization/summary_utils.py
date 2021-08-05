@@ -1,5 +1,4 @@
-import tensorflow as tf
-
+import tensorflow.compat.v1 as tf
 
 def visualize_input(boxes, image, masks):
     image_sum_sample = image[:1]

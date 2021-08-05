@@ -24,7 +24,7 @@ def _crop(image, offset_height, offset_width, crop_height, crop_width):
           tf.greater_equal(original_shape[1], crop_width)),
       ['Crop size greater than the image size.'])
 
-  offsets = tf.to_int32(tf.stack([offset_height, offset_width, 0]))
+  offsets = tf.cast(tf.stack([offset_height, offset_width, 0]), dtype=tf.int32)
 
   # Use tf.slice instead of crop_to_bounding box as it accepts tensors to
   # define the crop size.
@@ -120,15 +120,15 @@ def _central_crop(image_list, label_list, crop_height, crop_width):
 def _smallest_size_at_least(height, width, smallest_side):
   smallest_side = tf.convert_to_tensor(smallest_side, dtype=tf.int32)
 
-  height = tf.to_float(height)
-  width = tf.to_float(width)
-  smallest_side = tf.to_float(smallest_side)
+  height = tf.cast(height, dtype=tf.float32)
+  width = tf.cast(width, dtype=tf.float32)
+  smallest_side = tf.cast(smallest_side, dtype=tf.float32)
 
   scale = tf.cond(tf.greater(height, width),
                   lambda: smallest_side / width,
                   lambda: smallest_side / height)
-  new_height = tf.to_int32(height * scale)
-  new_width = tf.to_int32(width * scale)
+  new_height = tf.cast(height * scale, dtype=tf.int32)
+  new_width = tf.cast(width * scale, dtype=tf.int32)
   return new_height, new_width
 
 def _aspect_preserving_resize(image, label, smallest_side):
@@ -155,8 +155,8 @@ def _aspect_preserving_resize(image, label, smallest_side):
 def flip_gt_boxes(gt_boxes, ih, iw):
     x1s, y1s, x2s, y2s, cls = \
             gt_boxes[:, 0], gt_boxes[:, 1], gt_boxes[:, 2], gt_boxes[:, 3], gt_boxes[:, 4]
-    x1s = tf.to_float(iw) - x1s
-    x2s = tf.to_float(iw) - x2s
+    x1s = tf.cast(iw, dtype=tf.float32) - x1s
+    x2s = tf.cast(iw, dtype=tf.float32) - x2s
     return tf.concat(values=(x2s[:, tf.newaxis], 
                              y1s[:, tf.newaxis], 
                              x1s[:, tf.newaxis], 

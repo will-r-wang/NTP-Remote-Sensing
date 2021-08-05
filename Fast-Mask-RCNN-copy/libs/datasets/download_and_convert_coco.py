@@ -8,7 +8,7 @@ import math
 import zipfile
 import time
 import numpy as np
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from six.moves import urllib
 from PIL import Image
 import skimage.io as io
