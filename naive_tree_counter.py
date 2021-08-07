@@ -1,38 +1,40 @@
 import argparse
+import csv
 import cv2
 import numpy as np
+import os
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='naive tree count for an input image file')
-    parser.add_argument('-o', '--output-image-path', help='Output annotated image file name', default="images/sample_trees_annotated.tif")
+    parser = argparse.ArgumentParser(description='naive tree count for an input source folder with images')
+    parser.add_argument('-o', '--output-csv-path', help='Output csv file with image and tree counts', default="output_tree_counts.csv")
     requiredNamed = parser.add_argument_group('required named arguments')
-    requiredNamed.add_argument('-i', '--input-image-path', help='Input image file name', required=True)
+    requiredNamed.add_argument('-i', '--input-source-folder', help='Input image file name', required=True)
     args = parser.parse_args()
 
-    image = cv2.imread(args.input_image_path)
-    height, width, _ = image.shape
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    if os.path.exists(args.output_csv_path):
+        os.remove(args.output_csv_path)
 
-    # RGB mask filtering
-    GREEN_MIN = np.array([74, 83, 52], np.uint8)
-    GREEN_MAX = np.array([150, 209, 193], np.uint8)
+    with open(args.output_csv_path, mode='w') as output_csv_file:
+        csv_writer = csv.writer(output_csv_file, delimiter=',')
+        csv_writer.writerow(['image_file_path', 'num_green_pixels', 'num_trees'])
 
-    dst = cv2.inRange(hsv, GREEN_MIN, GREEN_MAX)
+        for filename in os.listdir(args.input_source_folder):
+            if filename.endswith(".png") or filename.endswith(".jpg") or filename.endswith(".tif"):
+                image = cv2.imread(args.input_source_folder + '/' + filename)
+                height, width, _ = image.shape
+                hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    EST_PIXELS_PER_TREE = 1000
-    num_green_pixels = cv2.countNonZero(dst)
-    print('Total # of green pixels:', str(num_green_pixels))
-    print('Total estimated # of trees:', str(num_green_pixels//EST_PIXELS_PER_TREE))
+                # RGB mask filtering
+                GREEN_MIN = np.array([74, 83, 52], np.uint8)
+                GREEN_MAX = np.array([150, 209, 193], np.uint8)
 
-    mask = dst == 0
-    green = np.zeros_like(image, np.uint8)
-    green[mask] = image[mask]
+                dst = cv2.inRange(hsv, GREEN_MIN, GREEN_MAX)
 
-    # Image grid-line annotation
-    for i in range(1, height//400 + 1):
-        cv2.line(green, (0, i * 400), (width, i * 400), (0, 0, 255), 1)
+                EST_PIXELS_PER_TREE = 1000
+                num_green_pixels = cv2.countNonZero(dst)
+                print('File name:', filename)
+                print('Total # of green pixels:', str(num_green_pixels))
+                print('Total estimated # of trees:', str(num_green_pixels//EST_PIXELS_PER_TREE))
+                print('-------------------------')
 
-    for j in range(1, width//400 + 1):
-        cv2.line(green, (j * 400, 0), (j * 400, height), (0, 0, 255), 1)
-
-    cv2.imwrite(args.output_image_path, green)
+                csv_writer.writerow([filename, str(num_green_pixels), str(num_green_pixels//EST_PIXELS_PER_TREE)])
