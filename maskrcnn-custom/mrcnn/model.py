@@ -2093,6 +2093,10 @@ class MaskRCNN():
                 "Could not find model directory under {}".format(self.model_dir))
         # Pick last directory
         dir_name = os.path.join(self.model_dir, dir_names[-1])
+        if not os.listdir(dir_name):
+            os.rmdir(dir_name)
+            return self.find_last()
+
         # Find the last checkpoint
         checkpoints = next(os.walk(dir_name))[2]
         checkpoints = filter(lambda f: f.startswith("mask_rcnn"), checkpoints)
@@ -2811,7 +2815,7 @@ def mold_image(images, config):
     the mean pixel and converts it to float. Expects image
     colors in RGB order.
     """
-    return images.astype(np.float32) - config.MEAN_PIXEL
+    return images[:,:,:3].astype(np.float32) - config.MEAN_PIXEL
 
 
 def unmold_image(normalized_images, config):

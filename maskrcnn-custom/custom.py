@@ -253,7 +253,7 @@ def color_splash(image, mask):
     mask = (np.sum(mask, -1, keepdims=True) >= 1)
     # Copy color pixels from the original color image where mask is set
     if mask.shape[0] > 0:
-        splash = np.where(mask, image, gray).astype(np.uint8)
+        splash = np.where(mask, image[:,:,:3], gray).astype(np.uint8)
     else:
         splash = gray
     return splash
@@ -517,7 +517,7 @@ if __name__ == '__main__':
             utils.download_trained_weights(weights_path)
     elif args.weights.lower() == "last":
         # Find last trained weights
-        weights_path = model.find_last()[1]
+        weights_path = model.find_last()
     elif args.weights.lower() == "imagenet":
         # Start from ImageNet trained weights
         weights_path = model.get_imagenet_weights()
