@@ -1,0 +1,27 @@
+{
+    "hough_lines_test.png24352": {
+        "filename": "hough_lines_test.png",
+        "size": 24352,
+        "regions": [
+            {
+                "shape_attributes": {
+                    "name": "polygon",
+                    "all_points_x": [
+                        79,
+                        57,
+                        119,
+                        149
+                    ],
+                    "all_points_y": [
+                        34,
+                        189,
+                        403,
+                        148
+                    ]
+                },
+                "region_attributes": {}
+            }
+        ],
+        "file_attributes": {}
+    }
+}

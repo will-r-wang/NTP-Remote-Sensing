@@ -1,0 +1,27 @@
+{
+    "hough_lines_test_rotated.png26406": {
+        "filename": "hough_lines_test_rotated.png",
+        "size": 26406,
+        "regions": [
+            {
+                "shape_attributes": {
+                    "name": "polygon",
+                    "all_points_x": [
+                        34,
+                        189,
+                        403,
+                        148
+                    ],
+                    "all_points_y": [
+                        655,
+                        677,
+                        615,
+                        585
+                    ]
+                },
+                "region_attributes": {}
+            }
+        ],
+        "file_attributes": {}
+    }
+}
