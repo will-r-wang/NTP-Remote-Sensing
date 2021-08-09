@@ -6,14 +6,12 @@ import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 
 
-def hough_line_detection(original_image, input_image, num_rhos=180, num_thetas=180, t_count=200):
+def hough_line_detection(original_image, input_image):
   height, width = input_image.shape[:2]
 
   d = np.sqrt(np.square(height) + np.square(width))
-  dtheta, drho = 180 / num_thetas, (2 * d) / num_rhos
-
-  thetas = np.arange(0, 180, step=dtheta)
-  rhos = np.arange(-d, d, step=drho)
+  thetas = np.arange(0, 180, step=180 / 180)
+  rhos = np.arange(-d, d, step=(2 * d) / 180)
 
   sin_thetas = np.sin(np.deg2rad(thetas))
   cos_thetas = np.cos(np.deg2rad(thetas))
@@ -41,7 +39,7 @@ def hough_line_detection(original_image, input_image, num_rhos=180, num_thetas=1
 
   for y in range(hough_matrix.shape[0]):
     for x in range(hough_matrix.shape[1]):
-      if hough_matrix[y][x] > t_count:
+      if hough_matrix[y][x] > 200:
         rho = rhos[y]
         theta = thetas[x]
         a, b = np.cos(np.deg2rad(theta)), np.sin(np.deg2rad(theta))
@@ -50,17 +48,20 @@ def hough_line_detection(original_image, input_image, num_rhos=180, num_thetas=1
         x1, y1 = int(x0 + 200 * (-b)), int(y0 + 200 * (a))
         x2, y2 = int(x0 - 200 * (-b)), int(y0 - 200 * (a))
 
-        hough_lines.append({
-          'strength': hough_matrix[y][x],
-          'rho': rhos[y],
-          'theta': thetas[x],
-          'end_points': [x1, x2, y1, y2]
-        })
+        hough_lines.append(
+                {
+                  'strength': hough_matrix[y][x],
+                  'rho': rhos[y],
+                  'theta': thetas[x],
+                  'end_points': [x1, x2, y1, y2]
+                }
+        )
 
         plot1.add_line(mlines.Line2D([x1, x2], [y1, y2]))
 
   # -- directionality determination
-  if np.average([h["theta"] for h in hough_lines[:len(hough_lines)//2]]) < np.average([h["theta"] for h in hough_lines[len(hough_lines)//2:]]):
+  if np.average([h["theta"] for h in hough_lines[:len(hough_lines)//2]])\
+          < np.average([h["theta"] for h in hough_lines[len(hough_lines)//2:]]):
       inverse = True
 
   sort_fn = lambda x: (x.get('strength'))

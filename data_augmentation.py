@@ -11,11 +11,11 @@ def rotate_counter_clockwise(width, json_data):
     return json_data
 
 if __name__ == '__main__':
-    with open("temp.json") as file:
+    with open("via_region_data.json") as file:
         data = json.load(file)
 
-    image = cv2.imread("images/hough_lines_test.png")
+    image = cv2.imread("images/treefall.png")
     height, width, _ = image.shape
 
-    with open("temp_rotated.json", "w") as outfile:
+    with open("via_region_data_rotated.json", "w") as outfile:
         json.dump(rotate_counter_clockwise(width, data), outfile, indent=4)
