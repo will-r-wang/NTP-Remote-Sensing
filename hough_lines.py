@@ -22,11 +22,13 @@ def hough_line_detection(original_image, input_image, num_rhos=180, num_thetas=1
   inverse = False
   hough_matrix = np.zeros((len(rhos), len(rhos)))
 
-  figure = plt.figure(figsize=(10, 10))
-  plot1 = figure.add_subplot(1, 2, 1)
+  figure = plt.figure(figsize=(20, 7))
+  plot1 = figure.add_subplot(1, 3, 1)
   plot1.imshow(original_image)
-  plot2 = figure.add_subplot(1, 2, 2)
+  plot2 = figure.add_subplot(1, 3, 2)
   plot2.imshow(original_image)
+  plot3 = figure.add_subplot(1, 3, 3)
+  plot3.imshow(original_image)
 
   for y in range(height):
     for x in range(width):
@@ -45,8 +47,8 @@ def hough_line_detection(original_image, input_image, num_rhos=180, num_thetas=1
         a, b = np.cos(np.deg2rad(theta)), np.sin(np.deg2rad(theta))
 
         x0, y0 = (a * rho) + width / 2, (b * rho) + height / 2
-        x1, y1 = int(x0 + 1000 * (-b)), int(y0 + 1000 * (a))
-        x2, y2 = int(x0 - 1000 * (-b)), int(y0 - 1000 * (a))
+        x1, y1 = int(x0 + 200 * (-b)), int(y0 + 200 * (a))
+        x2, y2 = int(x0 - 200 * (-b)), int(y0 - 200 * (a))
 
         hough_lines.append({
           'strength': hough_matrix[y][x],
@@ -58,7 +60,7 @@ def hough_line_detection(original_image, input_image, num_rhos=180, num_thetas=1
         plot1.add_line(mlines.Line2D([x1, x2], [y1, y2]))
 
   # -- directionality determination
-  if hough_lines[0]["theta"] < hough_lines[1]["theta"]:
+  if np.average([h["theta"] for h in hough_lines[:len(hough_lines)//2]]) < np.average([h["theta"] for h in hough_lines[len(hough_lines)//2:]]):
       inverse = True
 
   sort_fn = lambda x: (x.get('strength'))
@@ -70,14 +72,17 @@ def hough_line_detection(original_image, input_image, num_rhos=180, num_thetas=1
 
   if inverse:
     for i in range(len(top_hough_lines)):
-      top_hough_lines[i]["theta"] = 180 - top_hough_lines[i]["theta"]
+      top_hough_lines[i]["theta"] = 180 + top_hough_lines[i]["theta"]
 
   predicted_major_angle = np.mean([line["theta"] for line in top_hough_lines])
+  m_x1, m_x2, m_y1, m_y2 = np.mean([hough_line["end_points"] for hough_line in top_hough_lines], axis=0)
+  plot3.add_line(mlines.Line2D([m_x1, m_x2], [m_y1, m_y2], color=(0,1,0)))
+  plot3.plot(m_x1,m_y1,'o',color="#00FF00") if inverse else plot2.plot(m_x2,m_y2,'o', color="#00FF00")
 
   plot1.title.set_text("Detected Hough Lines")
-  plot2.title.set_text("Top 5 Hough Lines\n(Predicted Major Angle {}°)".format(predicted_major_angle))
+  plot2.title.set_text("Top 5 Hough Lines".format(predicted_major_angle))
+  plot3.title.set_text("Predicted Major Hough Line ({}°)".format(predicted_major_angle))
   plt.savefig("images/hough_lines_test_output.png")
-  plt.show()
 
   return top_hough_lines, predicted_major_angle
 
