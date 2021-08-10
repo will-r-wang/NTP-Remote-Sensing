@@ -12,8 +12,7 @@ import os
 import math
 import random
 import numpy as np
-import tensorflow.compat.v1 as tf
-tf.disable_v2_behavior()
+import tensorflow as tf
 import scipy
 import skimage.color
 import skimage.io
@@ -198,8 +197,8 @@ def box_refinement_graph(box, gt_box):
 
     dy = (gt_center_y - center_y) / height
     dx = (gt_center_x - center_x) / width
-    dh = tf.math.log(gt_height / height)
-    dw = tf.math.log(gt_width / width)
+    dh = tf.log(gt_height / height)
+    dw = tf.log(gt_width / width)
 
     result = tf.stack([dy, dx, dh, dw], axis=1)
     return result

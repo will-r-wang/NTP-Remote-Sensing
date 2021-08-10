@@ -11,3 +11,4 @@ scikit-image==0.15.0
 opencv-python==4.1.1.26
 matplotlib
 jupyter
+imgaug==0.4.0
