@@ -1,6 +1,23 @@
+"""
+Purpose
+-------
+Takes in an input source folder and applies a naive tree count with a predefined color thresholding function. Outputs the total pixel count and estimated number of trees.
+
+Inputs
+-------
+- Input source folder in which images are contained
+- Output image path to which annotated image is written to
+"""
+
+
 import argparse
 import cv2
 import numpy as np
+
+
+COLOR_THRESHOLD_MIN = [74, 83, 52]
+COLOR_THRESHOLD_MAX = [150, 209, 193]
+ESTIMATED_PIXELS_PER_TREE = 1000
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='naive tree count for an input image file')
@@ -13,16 +30,15 @@ if __name__ == '__main__':
     height, width, _ = image.shape
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
-    # RGB mask filtering
-    GREEN_MIN = np.array([74, 83, 52], np.uint8)
-    GREEN_MAX = np.array([150, 209, 193], np.uint8)
+    # color thresholding with simple MIN/MAX bounding
+    GREEN_MIN = np.array(COLOR_THRESHOLD_MIN, np.uint8)
+    GREEN_MAX = np.array(COLOR_THRESHOLD_MAX, np.uint8)
 
     dst = cv2.inRange(hsv, GREEN_MIN, GREEN_MAX)
 
-    EST_PIXELS_PER_TREE = 1000
     num_green_pixels = cv2.countNonZero(dst)
     print('Total # of green pixels:', str(num_green_pixels))
-    print('Total estimated # of trees:', str(num_green_pixels//EST_PIXELS_PER_TREE))
+    print('Total estimated # of trees:', str(num_green_pixels//ESTIMATED_PIXELS_PER_TREE))
 
     mask = dst == 0
     green = np.zeros_like(image, np.uint8)

@@ -1,8 +1,25 @@
+"""
+Purpose
+-------
+Takes in an input VGG json annotated file and generates the corresponding masks and final masked output image
+
+Inputs
+-------
+- Input json file name to which objects are read from
+- Output folder path to which masks are written to
+- Image dimensions
+"""
+
+
+import json
 import argparse
 import cv2
-import json
 import numpy as np
-import os
+
+
+OUTPUT_FOLDER_PATH = "images/masks/"
+IMAGE_HEIGHT = 2456
+IMAGE_WIDTH = 1634
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='generates masks from an input vgg json annotation file and corresponding image')
@@ -11,7 +28,6 @@ if __name__ == '__main__':
 
     polygons = {}
     with open(args.input_json_file) as file:
-    # with open("./via_region_data.json") as file:
         data = json.load(file)
 
     for project in data:
@@ -25,6 +41,6 @@ if __name__ == '__main__':
 
             polygon_coords = list(zip(x_points, y_points))
 
-            mask = np.zeros((2456, 1634)) # dimensions of treefall.png
+            mask = np.zeros((IMAGE_HEIGHT, IMAGE_WIDTH)) # dimensions of treefall.png
             cv2.fillPoly(mask, [np.array(polygon_coords)], color=(255, 255, 255))
-            cv2.imwrite("images/masks/" + filename + "_" + str(idx) + ".png" , mask)
+            cv2.imwrite(OUTPUT_FOLDER_PATH + filename + "_" + str(idx) + ".png" , mask)
