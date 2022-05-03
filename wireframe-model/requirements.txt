@@ -1,0 +1,11 @@
+python3
+pytorch==0.3.1
+opencv==3.3.1 
+scipy
+numpy
+progress
+protobuf
+joblib
+tqdm
+dominate
+
