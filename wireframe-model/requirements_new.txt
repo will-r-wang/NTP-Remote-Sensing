@@ -1,0 +1,27 @@
+brotlipy==0.7.0
+certifi==2021.10.8
+cffi @ file:///Users/ktietz/Code/oss/ci_pkgs/cffi_1624487777258/work
+chardet @ file:///Users/ktietz/Code/oss/ci_pkgs/chardet_1626783467640/work
+conda==4.11.0
+conda-package-handling @ file:///Users/ktietz/Code/oss/ci_pkgs/conda-package-handling_1626784934972/work
+cryptography @ file:///Users/ktietz/Code/oss/ci_pkgs/cryptography_1624488650114/work
+idna @ file:///home/linux1/recipes/ci/idna_1610986105248/work
+joblib==1.1.0
+mamba @ file:///Users/runner/miniforge3/conda-bld/mamba_1629310371329/work
+numpy==1.22.3
+opencv-python==4.5.5.64
+Pillow==9.1.1
+progressbar==2.5
+pycosat==0.6.3
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1608057966937/work
+PySocks @ file:///Users/ktietz/Code/oss/ci_pkgs/pysocks_1626781349491/work
+requests @ file:///tmp/build/80754af9/requests_1608241421344/work
+ruamel-yaml-conda @ file:///Users/ktietz/Code/oss/ci_pkgs/ruamel_yaml_1626786937887/work
+scipy==1.8.0
+six @ file:///tmp/build/80754af9/six_1623709665295/work
+torch==1.11.0
+torchvision==0.12.0
+tqdm @ file:///tmp/build/80754af9/tqdm_1625563689033/work
+typing-extensions==4.2.0
+urllib3 @ file:///tmp/build/80754af9/urllib3_1625084269274/work

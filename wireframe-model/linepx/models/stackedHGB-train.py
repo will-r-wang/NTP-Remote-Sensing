@@ -44,8 +44,8 @@ class stackHourglassTrainer():
             inputData_var, line_var = Variable(inputData), Variable(line)
             self.optimizer.zero_grad()
             if self.opt.GPU:
-                inputData_var = inputData_var.cuda()
-                line_var = line_var.cuda()
+                inputData_var = inputData_var
+                line_var = line_var
             dataTime = time.time() - start
 
             loss, line_loss, line_result = self.model.forward(inputData_var, line_var)
@@ -54,11 +54,11 @@ class stackHourglassTrainer():
             self.optimizer.step()
             runTime = time.time() - start
 
-            avgLoss = (avgLoss * i + loss.data[0]) / (i + 1)
+            avgLoss = (avgLoss * i + loss.data) / (i + 1)
 
-            log = 'Epoch: [%d][%d/%d] Time %1.3f Data %1.3f Err %1.4f\n' % (epoch, i, len(trainLoader), runTime, dataTime, loss.data[0])
+            log = 'Epoch: [%d][%d/%d] Time %1.3f Data %1.3f Err %1.4f\n' % (epoch, i, len(trainLoader), runTime, dataTime, loss.data)
             self.logger['train'].write(log)
-            self.progbar.update(i, [('Time', runTime), ('Loss', loss.data[0])])
+            self.progbar.update(i, [('Time', runTime), ('Loss', loss.data)])
 
             if i <= self.opt.visTrain:
                 visImg.append(inputData)

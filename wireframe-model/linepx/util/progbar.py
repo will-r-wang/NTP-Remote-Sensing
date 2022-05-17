@@ -81,7 +81,7 @@ class progbar(object):
             for k in self.unique_values:
                 info += '  %s:' % k
                 if isinstance(self.sum_values[k], list):
-                    avg = np.mean(self.sum_values[k][0] / max(1, self.sum_values[k][1]))
+                    avg = np.mean(np.array(self.sum_values[k]) / max(1, self.sum_values[k][1]))
                     if abs(avg) > 1e-3:
                         info += ' %.4f' % avg
                     else:

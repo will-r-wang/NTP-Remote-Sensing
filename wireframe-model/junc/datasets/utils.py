@@ -330,7 +330,7 @@ debug = False
 def load_data_and_save(H, src_dir, save_dir, filenames, split='train', use_mp=True):
     print("src_dir: {} save_dir: {}".format(src_dir, save_dir))
     
-    bar = pb.ProgressBar(widgets=[ '[ ', pb.Bar(), ' ][ ', pb.Timer(), ' ]'], max_value=pb.UnknownLength)
+    bar = pb.ProgressBar(widgets=[ '[ ', pb.Bar(), ' ][ ', pb.Timer(), ' ]'])
     def loadDataset():
         return Parallel(n_jobs=1)(delayed(loading)(f, src_dir) for f in bar(filenames))
     
@@ -343,7 +343,7 @@ def load_data_and_save(H, src_dir, save_dir, filenames, split='train', use_mp=Tr
         cpu_num = multiprocessing.cpu_count()
         cpu_num = min(30, cpu_num)
         
-        bar = pb.ProgressBar(widgets=[ '[ ', pb.Bar(), ' ][ ', pb.Timer(), ' ]'], max_value=pb.UnknownLength)
+        bar = pb.ProgressBar(widgets=[ '[ ', pb.Bar(), ' ][ ', pb.Timer(), ' ]'])
         if use_mp:
             Parallel(n_jobs=cpu_num)(delayed(save_ann)(H, d, save_dir, split=split)
                 for d in bar(anno))  # max_len default to 1.

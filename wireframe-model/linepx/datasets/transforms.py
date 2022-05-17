@@ -26,9 +26,9 @@ def unScaleRGB(ipt):
     return opt
 
 def normalize(ipt, mean, std):
-    ipt[:][:][0] = (ipt[:][:][0] - mean[0]) / std[0]
-    ipt[:][:][1] = (ipt[:][:][1] - mean[1]) / std[1]
-    ipt[:][:][2] = (ipt[:][:][2] - mean[2]) / std[2]
+    ipt[:][:][0] = (torch.tensor(ipt[:][:][0]) - mean[0]) / std[0]
+    ipt[:][:][1] = (torch.tensor(ipt[:][:][1]) - mean[1]) / std[1]
+    ipt[:][:][2] = (torch.tensor(ipt[:][:][2]) - mean[2]) / std[2]
     return ipt
 
 def unNormalize(ipt, mean, std):

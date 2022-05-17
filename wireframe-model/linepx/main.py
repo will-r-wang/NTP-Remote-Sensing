@@ -12,8 +12,6 @@ def main():
     #cudnn.benchmark = True
 
     opt = opts.parse()
-    print(("device id: {}".format(torch.cuda.current_device())))
-
 
     models = importlib.import_module('models.init')
     criterions = importlib.import_module('criterions.init')
@@ -41,7 +39,6 @@ def main():
 
     # Create model
     model, optimState = models.setup(opt, checkpoint)
-    model.cuda()
 
     criterion = criterions.setup(opt, checkpoint, model)
 
